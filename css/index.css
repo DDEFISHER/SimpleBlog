@@ -1,0 +1,62 @@
+body {
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
+#bodyDiv{
+    margin: 0 auto;
+    width: 600px;    
+}
+hr {
+
+    border-top:1px solid #99ccff;
+}
+
+#post:hover{
+    background-color: #99ccFF;
+}
+#bHeader{
+
+    background-color: #484848; 
+    padding: 15px 15px 15px 15px;
+    color: #99ccFF;
+    font-weight: bold;
+}
+a, a:hover,a:visited, a:active{
+    color: inherit;
+    text-decoration: none;
+
+}
+#name{
+    position: relative;
+}
+#bSpan{
+    margin-left: 30px;
+    color: white;
+    float: right;
+}
+#ASpan{
+    margin-left: 30px;
+    color: white;
+    float: right;
+}
+#adminButton{
+    margin-left: 30px;
+    color: white;
+    float: right;
+}
+#innerHeader{
+    margin: 0 auto;
+    width: 600px;  
+}
+#bodyField {
+    resize: none;
+}
+#summaryField {
+    resize: none;
+}
+#titleField {
+    resize: none;
+}
+#posting{
+    width: 600px;
+    margin: 0 auto;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>NoobBlogAdmin</title>
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/index.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src= js/admin.js></script>
+    </head>
+    <body onload= "init()">
+
+        <div id = "bHeader">
+            <div id = "innerHeader">
+                <span id ="name">Daniel DeFisher</span>
+                <a href="http://localhost:5000/index">
+                <span id ="bSpan">Blog</span>
+                </a>
+                <a href="http://localhost:5000/about">
+                <span id ="ASpan">About</span>
+                </a>
+                <a href="http://localhost:5000/admin">
+                    <span id ="adminButton">Admin</span>
+                </a>
+            </div>
+        </div>
+
+        <div id="posting">
+            <h2>Create a new post</h3>
+            <div id="NewPostButton">
+            <button id="newButton" type="button" class="btn btn-default" onclick="">New Post</button>  
+            </div>
+            <div id="NewPost">
+                <h3>Title</h3>
+                <input id="titleField" class="form-control" type="text">
+                <h3>Summary</h3>
+                <textarea id="summaryField" class="form-control" rows="2" cols="100"></textarea>
+                <h3>Body</h3>
+                <textarea id="bodyField" class="form-control" rows="5" cols="100"></textarea>
+                <h3></h3>
+                <button id="submitButton" type="submit" class="btn btn-default" onclick="submit();">Submit</button>  
+            </div>
+
+            <div id="Oldposts">
+                <h2>Old Posts</h2>
+                <table id="oTable" class="table table-striped">
+                    <tr>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th>Date</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        
+    </body>
+
+
+ 
+</html>
