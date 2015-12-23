@@ -103,6 +103,29 @@ function deletePost(title){
 function editPost(title){
 
 
+    title = title.replace(/ /g,'%20');
+
+    
+    var postTitle;
+    var postSummary;
+    var postBody;
+    $.ajax({ url: "http://localhost:5000/api/getpost",
+             type: "POST",
+             crossDomain: true,
+             data: JSON.stringify(title)}).done( function(data){ 
+
+        postTitle = data.Title;
+        postSummary = data.Summary;
+        postBody = data.Body;
+
+        $('#titleField').val(postTitle);
+        $('#summaryField').val(postSummary);
+        $('#bodyField').val(postBody);
+        $('#NewPost').toggle();
+        
+    });
+    
+
 
 }
 

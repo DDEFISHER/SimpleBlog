@@ -8,22 +8,53 @@ function getPosts(request, response)
 {
 
     mongo.connect(dbUrl, function(err,db){
-        if(err) throw err
+        if(err) throw err;
 
         var collection = db.collection('posts');
 
         collection.find().toArray(function(err,documents){
-            if(err) throw err
+            if(err) throw err;
 
             response.writeHead(200,{'content-type' : 'application/json',
             "Access-Control-Allow-Origin" : "*"});
             response.write(JSON.stringify(documents));
             response.end();
-
+            
             db.close();
             
         });
 
+    });
+
+}
+function getPost(request, response)
+{
+
+    var dataobject = {};
+
+    request.on('data', function(chunk) {
+
+        dataobject = JSON.parse(chunk);
+    
+
+        mongo.connect(dbUrl, function(err,db){
+            if(err) throw err;
+
+            var collection = db.collection('posts');
+
+            collection.find({Title:dataobject}).toArray(function(err,doc){
+                if(err) throw err;
+
+                response.writeHead(200,{'content-type' : 'application/json',
+                "Access-Control-Allow-Origin" : "*"});
+                response.write(JSON.stringify(doc[0]));
+                response.end();
+
+                db.close();
+                
+            });
+
+        });
     });
 
 }
@@ -43,21 +74,21 @@ function deletePost(request, response)
         response.writeHead(200, "OK", {'Content-Type': 'text/html',
         "Access-Control-Allow-Origin" : "*"});
         response.end();
-    });
 
-    mongo.connect(dbUrl, function(err,db){
-        if(err) throw err
+        mongo.connect(dbUrl, function(err,db){
+            if(err) throw err;
 
-        var collection = db.collection('posts');
-        collection.remove({Title:dataobject}, function(err,data){
-            if(err) throw err
+            var collection = db.collection('posts');
+            collection.remove({Title:dataobject}, function(err,data){
+                if(err) throw err;
 
-            db.close();
+                db.close();
+            });
+
         });
-
     });
 }
-
+//should really be named submit post since it handles edits as well
 function newPost(request, response)
 {
 
@@ -75,13 +106,26 @@ function newPost(request, response)
         response.end();
 
         mongo.connect(dbUrl, function(err,db){
-            if(err) throw err
+            if(err) throw err;
             var collection = db.collection('posts');
 
-            collection.insert(dataobject, function(err,data){
-                if(err) throw err
+            collection.find({"Title" : dataobject.Title}).toArray( function(err,data){
 
-                db.close();
+                if(err) throw err;
+                
+
+                
+                if(data[0] !== undefined)
+                    dataobject._id = data[0]._id;
+
+                console.log(dataobject);
+
+                collection.save(dataobject, function(err,data){
+
+                    if(err) throw err;
+
+                    db.close();
+                });
             });
 
         });
@@ -91,15 +135,14 @@ function newPost(request, response)
 function postExist(urlMap,response){
 
     var postname = urlMap.slice(1);
-    console.log(postname);
     mongo.connect(dbUrl, function(err,db){
-        if(err) throw err
+        if(err) throw err;
         var collection = db.collection('posts');
         
 
             
             collection.find({Title:postname}).toArray(function (err, docs){
-            if(err) throw err
+            if(err) throw err;
             
             if(docs.length === 0){
 
@@ -168,7 +211,7 @@ function postExist(urlMap,response){
 function adminPage(request,response){
 
     fs.readFile('admin.html', function (err, html){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/html',
         "Access-Control-Allow-Origin" : "*"});
@@ -179,7 +222,7 @@ function adminPage(request,response){
 function adminPageJs(request,response){
 
    fs.readFile('js/admin.js', function (err, js){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'application/javascript',
         "Access-Control-Allow-Origin" : "*"});
@@ -190,7 +233,7 @@ function adminPageJs(request,response){
 function adminPageCss(request,response){
 
     fs.readFile('css/admin.css', function (err, css){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/css',
         "Access-Control-Allow-Origin" : "*"});
@@ -201,7 +244,7 @@ function adminPageCss(request,response){
 function indexPage(request,response){
 
     fs.readFile('index.html', function (err, html){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/html',
         "Access-Control-Allow-Origin" : "*"});
@@ -212,7 +255,7 @@ function indexPage(request,response){
 function aboutPage(request,response){
 
     fs.readFile('about.html', function (err, html){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/html',
         "Access-Control-Allow-Origin" : "*"});
@@ -223,7 +266,7 @@ function aboutPage(request,response){
 function indexPageJs(request,response){
 
    fs.readFile('js/index.js', function (err, js){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'application/javascript',
         "Access-Control-Allow-Origin" : "*"});
@@ -234,7 +277,7 @@ function indexPageJs(request,response){
 function indexPageCss(request,response){
 
     fs.readFile('css/index.css', function (err, css){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/css',
         "Access-Control-Allow-Origin" : "*"});
@@ -245,7 +288,7 @@ function indexPageCss(request,response){
 function adminBootCss(request,response){
 
     fs.readFile('css/bootstrap.css', function (err, css){
-        if(err) throw err
+        if(err) throw err;
         
         response.writeHeader(200,{'content-type' : 'text/css',
         "Access-Control-Allow-Origin" : "*"});
@@ -260,6 +303,10 @@ var server = http.createServer(function(request,response){
     if(urlMap.pathname === "/api/getposts"){
 
         getPosts(request, response);
+    }
+    else if(urlMap.pathname === "/api/getpost"){
+
+        getPost(request, response);
     }
     else if(urlMap.pathname === "/api/deletepost"){
         
